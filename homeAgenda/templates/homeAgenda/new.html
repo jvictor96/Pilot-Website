@@ -1,0 +1,59 @@
+{% extends 'thebase.html' %}
+
+{% block 'conteudo' %}
+<form action="{% url 'Anew' %}" method="POST">
+<table class="corpo">
+    {% csrf_token %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <tr>
+                <td class="cell">
+                    {{message}}
+                </td>
+            </tr>
+    <tr>
+        {% endfor %}
+    {% endif %}
+
+    <tr>
+        <td class="cell">
+            Título: <input type="text" name="nome" value="{{tarefa.nome}}">
+            <input type="checkbox" name="edita" {{editando}} hidden>
+            <input type="text" name="id" value="{{tarefa.id}}" hidden>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Descrição: <input type="text" name="desc" value="{{tarefa.desc}}">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Dono: {{user.username}}<input type="text" name="dono" value="{{user.username}}" hidden>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Etiqueta:
+            <input list="etiquetas" name="tag" value="{{tarefa.tag}}">
+            <datalist id="etiquetas">
+                {% for tag in tags %}
+                <option value="{{tag}}">
+                {% endfor %}
+            </datalist>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Prazo: <input type="datetime-local" name="prazo" value="{{agora}}">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            <button type="submit">Confirma</button>
+        </td>
+    </tr>
+</table>
+</form>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'e.css' %}">
+</head>
+<body>
+<table class="header"><tr><td class="cabeca">
+    <h1><a href="{% url 'index' %}" class="header">Pilot</a></h1>
+</td></tr></table>
+
+{% block 'logger' %}
+{% endblock %}
+
+{% block 'conteudo' %}
+{% endblock %}
+
+</body>
+</html>

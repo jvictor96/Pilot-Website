@@ -1,0 +1,185 @@
+{% extends 'thebase.html' %}
+
+{% block 'logger' %}
+<table class="logger">
+        <tr><td style="height: 50px;">
+            <b>Registros</b>
+        </td>
+            {% if user.is_authenticated %}
+                <td class="field">
+                    {{user}}
+                </td><td class="field">
+
+                </td><td class="field">
+                    <a href="{% url 'grupos' user.email %}">Grupos</a>
+                </td><td class="field">
+                    <a href="{% url 'new' %}">Novo registro</a>
+                </td><td class="field">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </td>
+            {% else %}
+                <form action="{% url 'Zlogin'%}" method="POST">
+                    {% csrf_token %}
+                <td>
+                    Nome de usuário:<input type="text" style="margin-right:20px;" name="usuario">
+                    <a href="{% url 'logonPasso1' %}">Criar conta</a>
+                </td><td>
+                    Senha:<input type="password" style="margin-right:20px;" name="senha">
+                </td><td>
+                    <button type="submit">Confirmar</button>
+                </td>
+                </form>
+            {% endif %}
+        </tr>
+    {% if user.is_authenticated %}
+    {% endif %}
+</table>
+{% endblock %}
+
+
+
+{% block 'conteudo' %}
+
+{% if messages %}
+<table style="margin: 1%; border-radius: 5px; width:98%; background-color: #EEE">
+{% for message in messages %}
+    <tr><td class="cell">
+        {{message}}
+    </td></tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if user.is_authenticated %}
+{% if key == 'index' %}
+{% if not grupos %}
+
+<h1 style="color:black; text-align:center; margin-top:100px;">Você ainda não faz parte de nenhum grupo</h1>
+<h2 style="color:black; text-align:center;">Experimente criar um ou procure o administrador de algum</h2>
+
+{% endif %}
+{% for grp in grupos %}
+<table style="margin: 1%; border-radius: 5px; width:98%; background-color: #EEE">
+    <tr><td class="cell">
+        <a href="{% url 'buscaGrupo' grp.id %}"><b>{{grp.titulo}}</b></a>
+    </td><td class="cell">
+        <b>Cont</b>
+    </td><td class="cell">
+        <b>{{grp.dono}}</b>
+    </td><td class="cell">
+        <b>{{grp.tag}}</b>
+    </td><td class="cell">
+        <b>Novo registro</b>
+    </td></tr>
+
+    <tr><td class="cell">
+        Título
+    </td><td class="cell">
+        Contagem
+    </td><td class="cell">
+        Dono
+    </td><td class="cell">
+        Etiqueta
+    </td><td class="cell">
+        Data
+    </td></tr>
+
+{% for coisa in grp.coisas %}
+
+    <tr><td class="cell">
+        <a href="{% url 'buscaTitulo' grp.id coisa.titulo %}">{{coisa.titulo}}</a>
+    </td><td class="cell">
+        {{coisa.cont}}
+    </td><td class="cell">
+        <a href="{% url 'buscaDono' grp.id coisa.dono %}">{{coisa.dono}}</a>
+    </td><td class="cell">
+        {% if coisa.tag %}
+            <a href="{% url 'buscaTag' grp.id coisa.tag %}">{{coisa.tag}}</a>
+        {% endif %}
+    </td><td class="cell">
+        {{coisa.data}}
+    </td></tr>
+
+{% endfor %}
+    <tr><td colspan="5">
+        Etiquetas:
+        {% for tag in grp.etiquetas %}<a href="{% url 'buscaTag' grp.id tag %}">{{tag}}</a>
+        {% endfor %}
+    </td></tr>
+
+</table>
+{% endfor %}
+
+{% else %}
+
+<table style="margin: 1%; border-radius: 5px; width:98%; background-color: #EEE">
+    <tr><td class="cell">
+        <a href="{% url 'buscaGrupo' grp.id %}"><b>{{grp.titulo}}</b></a>
+    </td><td class="cell">
+        <b>Cont</b>
+    </td><td class="cell">
+        <b>{{grp.dono}}</b>
+    </td><td class="cell">
+        <b>{{grp.tag}}</b>
+    </td><td class="cell">
+        <b>Novo registro</b>
+    </td></tr>
+
+    <tr><td class="cell">
+        Título
+    </td><td class="cell">
+        Contagem
+    </td><td class="cell">
+        Dono
+    </td><td class="cell">
+        Etiqueta
+    </td><td class="cell">
+        Data
+    </td></tr>
+
+{% for coisa in coisas %}
+
+    <tr><td class="cell">
+        <a href="{% url 'buscaTitulo' grp.id coisa.titulo %}">{{coisa.titulo}}</a>
+    </td><td class="cell">
+        {{coisa.cont}}
+    </td><td class="cell">
+        <a href="{% url 'buscaDono' grp.id coisa.dono %}">{{coisa.dono}}</a>
+    </td><td class="cell">
+        {% if coisa.tag %}
+            <a href="{% url 'buscaTag' grp.id coisa.tag %}">{{coisa.tag}}</a>
+        {% endif %}
+    </td><td class="cell">
+        {{coisa.data}}
+    </td></tr>
+
+{% endfor %}
+    <tr><td colspan="5">
+    {% for tag in grp.etiquetas %}
+        Estiquetas: <a href="{% url 'buscaTag' grp.titulo tag %}"> {{tag}} </a>
+    {% endfor %}
+    </td></tr>
+
+</table>
+
+<br>
+
+<table class="paginator"><tr>
+    {% for pagina in coisas.paginator.page_range %}
+    <td class="page-item">
+        <a href="?page={{pagina}}"> {{pagina}} </a></td>
+    {% endfor %}
+</table>
+
+{% endif %}
+{% else %}
+
+<h1 style="color:black; text-align:center; margin-top:100px;">Bem-vindo ao meu site :)</h1>
+<h2 style="color:black; text-align:center;">Registre dados, compartilhe com grupos específicos e tenha acesso aos
+    registros dos seus colaboradores.</h2>
+<h2 style="color:black; text-align:center;">Faça login para começar a usar.</h2>
+<h3 style="color:black; text-align:center;">ass. José Victor</h3>
+
+{% endif %}
+
+{% endblock %}

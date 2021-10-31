@@ -1,0 +1,30 @@
+{% extends 'thebase.html' %}
+
+{% block 'conteudo' %}
+<form action="{% url 'logonPasso3' %}" method="post">
+<table class="corpo">
+    {% csrf_token %}
+    <tr>
+        <td class="cell">
+            Código de confirmação enviado para {{email}}
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Código: <input type="text" name="codigo">
+            <input type="text" name="nome" value="{{nome}}" hidden>
+            <input type="text" name="sobrenome" value="{{sobrenome}}" hidden>
+            <input type="text" name="email" value="{{email}}" hidden>
+            <input type="text" name="usuario" value="{{usuario}}" hidden>
+            <input type="text" name="senha" value="{{senha}}" hidden>
+            <input type="text" name="chave" value="{{chave}}" hidden>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            <button type="submit">Confirma</button>
+        </td>
+    </tr>
+</table>
+</form>
+{% endblock %}

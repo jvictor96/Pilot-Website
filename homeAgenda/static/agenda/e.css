@@ -1,0 +1,73 @@
+body {
+    margin: 0px;
+}
+
+td.cabeca {
+    text-align: right;
+    height: 80px;
+    vertical-align: middle;
+}
+
+td.field {
+    text-align: right;
+    vertical-align: middle;
+}
+
+td.cell {
+    text-align: left;
+    height: 30px;
+    border-bottom: 1px solid #BBB;
+}
+
+table.header {
+    width:100%;
+    background-color: #333;
+}
+
+table.corpo {
+    width:100%;
+    margin=20px;
+    border-radius: 8px;
+    background-color: #EEE;
+}
+
+table.logger {
+    width:100%;
+    background-color: #BBB;
+}
+
+table.paginator {
+    height: 40px;
+}
+
+td.page-item {
+    width: 30px;
+    border:1px solid black;
+    text-align: center;
+}
+
+a:visited {
+    color: black;
+}
+
+a:link {
+    color: black;
+}
+
+a:-webkit-any-link {
+    color: black;
+}
+
+a:-webkit-any-link.header {
+    text-decoration: none;
+    color: white;
+}
+
+h1 {
+    color: white;
+    margin:8px;
+}
+
+p {
+    margin: 5px;
+}

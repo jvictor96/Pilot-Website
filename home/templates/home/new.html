@@ -1,0 +1,66 @@
+{% extends 'thebase.html' %}
+
+{% block 'conteudo' %}
+<form action="{% url 'new' %}" method="POST">
+<table class="corpo">
+    {% csrf_token %}
+    <tr>
+        <td class="cell">
+            Título:
+            <input list="titulos" name="titulo" value="{{titulo}}">
+            <datalist id="titulos">
+                {% for titulo in titulos %}
+                <option value="{{titulo}}">
+                {% endfor %}
+            </datalist>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Contagem: <input type="text" name="contagem" value="{{contagem}}">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Dono: {{user.first_name}}<input type="text" name="dono" value="{{user.first_name}}" hidden>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Email: {{user.email}}<input type="text" name="email" value="{{user.email}}" hidden>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Etiqueta:
+            <input list="etiquetas" name="tag" value="{{etiqueta}}">
+            <datalist id="etiquetas">
+                {% for tag in tags %}
+                <option value="{{tag}}">
+                {% endfor %}
+            </datalist>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Grupo:
+            <select name="grupo" value="{{grupo}}">
+                {% for grupo in grupos %}
+                <option value="{{grupo}}">{{grupo}}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Data: <input type="datetime-local" name="data" value="{{agora}}">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            <button type="submit">Confirma</button>
+        </td>
+    </tr>
+</table>
+</form>
+{% endblock %}

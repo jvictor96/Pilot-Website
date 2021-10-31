@@ -1,0 +1,139 @@
+{% extends 'thebase.html' %}
+
+{% block 'logger' %}
+<table class="logger">
+        <tr><td style="height: 50px;">
+            <b>Agenda</b>
+        </td>
+            {% if user.is_authenticated %}
+                <td class="field">
+                    {{user}}
+                </td><td class="field">
+                    <a href="{% url 'Anew' %}">Nova tarefa</a>
+                </td><td class="field">
+                    <a href="{% url 'Ahistorico' 1 %}">Histórico</a>
+                </td><td class="field">
+                    <a href="{% url 'Anew' %}">Controle</a>
+                </td><td class="field">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </td>
+            {% else %}
+                <form action="{% url 'Zlogin'%}" method="POST">
+                    {% csrf_token %}
+                <td>
+                    Nome de usuário:<input type="text" style="margin-right:20px;" name="usuario">
+                    <a href="{% url 'logonPasso1' %}">Criar conta</a>
+                </td><td>
+                    Senha:<input type="password" style="margin-right:20px;" name="senha">
+                </td><td>
+                    <button type="submit">Confirmar</button>
+                </td>
+                </form>
+            {% endif %}
+        </tr>
+
+</table>
+{% endblock %}
+
+
+
+{% block 'conteudo' %}
+
+<table style="float:left; width: 70%; margin:1%; background-color: #DDD; border-radius:4px;
+padding:8px;">
+    <tr><td class="cell">
+        <p style="font-size:20px; margin:5px;"><a href=""><b>Tarefas agendadas</b></a></p>
+    </td></tr>
+
+    <tr><td class="cell">
+        <p style="font-size:18px; margin:5px;">{{alerta}}</p>
+    </td></tr>
+
+    {% for tarefa in agendadas %}
+    <tr><td class="cell">
+        <p>
+            <a href=""><b>{{tarefa.nome}}</b></a>
+            {% if tarefa.feita and history%} (feita) {% elif history %} (atrasada) {% endif %}
+            <a href="{% url 'AbuscaEtiqueta' tarefa.tag%}"><span style="float: right; display:block;">{{tarefa.tag}}</span></a>
+        </p>
+        <p>
+            {{tarefa.prazo}}
+        </p>
+        {% if tarefa.desc %}
+            <p>{{tarefa.desc}}</p>
+        {% else %}
+            <p>Sem descrição</p>
+        {% endif %}
+        {% if tarefa.tarefas %}
+            {% for trf in tarefa.tarefas %}
+                <p>{{tarefa.nome}}</p>
+            {% endfor %}
+        {% endif %}
+        {% if tarefa.comentario %}
+            <p>{{tarefa.comentario}}</p>
+        {% else %}
+            <p>Sem comentários</p>
+        {% endif %}
+        <a href="{% url 'Aacao' 'Apagar' tarefa.id %}" style="margin:0px 10px 0px 0px;">Apagar</a>
+        <a href="{% url 'Aacao' 'Encerrar' tarefa.id %}" style="margin:0px 10px 0px 0px;">Encerrar</a>
+        <a href="{% url 'Aacao' 'Editar' tarefa.id %}" style="margin:0px 10px 0px 0px;">Editar</a>
+        <a href="{% url 'Aacao' 'Comentar' tarefa.id %}" style="margin:0px 10px 0px 0px;">Comentar</a>
+        <a href="{% url 'Aacao' 'Favoritar' tarefa.id %}"><span style="float: right;">fixar</span></a>
+    </td></tr>
+    {% endfor %}
+    <tr><td><br>
+        <a href="{% url 'AbuscaData' 0 %}" style="margin:0px 10px 0px 0px;">Hoje</a>
+        <a href="{% url 'AbuscaData' 1 %}" style="margin:0px 10px 0px 0px;">Amanhã</a>
+        <a href="{% url 'AbuscaData' 2 %}" style="margin:0px 10px 0px 0px;">Ainda nessa semana</a>
+        <a href="{% url 'AbuscaData' 3 %}" style="margin:0px 10px 0px 0px;">Semana que vem</a>
+        <a href="{% url 'AbuscaData' 4 %}" style="margin:0px 10px 0px 0px;">Ainda nesse mês</a>
+        <a href="{% url 'AbuscaData' 5 %}" style="margin:0px 10px 0px 0px;">Mês que vem</a>
+        <a href="{% url 'Aindex' %}" style="margin:0px 10px 0px 0px;">Todas</a>
+    </td></tr>
+</table>
+
+
+
+<table style="float:right; width: 26%; margin:1%; background-color: #DDD; border-radius:4px;
+padding: 8px;">
+    <tr><td class="cell">
+        <a href=""><b>Tarefas pontuais</b></a>
+    </td></tr>
+    {% if not pontuais %}
+    <tr><td class="cell">
+        <p style="font-size:18px; margin:5px;">Você não tem tarefas para fazer, pode descansar!</p>
+    </td></tr>
+    {% endif %}
+    {% for tarefa in pontuais %}
+    <tr><td class="cell">
+        <p>
+            <a href=""><b>{{tarefa.nome}}</b></a>
+            <a href="{% url 'AbuscaEtiqueta' tarefa.tag%}"><span style="float: right; display:block;">{{tarefa.tag}}</span></a>
+        </p>
+        {% if tarefa.desc %}
+            <p>{{tarefa.desc}}</p>
+        {% else %}
+            <p>Sem descrição</p>
+        {% endif %}
+        {% if tarefa.tarefas %}
+            {% for trf in tarefa.tarefas %}
+                <p>{{tarefa.nome}}</p>
+            {% endfor %}
+        {% endif %}
+        {% if tarefa.comentario %}
+            <p>{{tarefa.comentario}}</p>
+        {% else %}
+            <p>Sem comentários</p>
+        {% endif %}
+        <a href="{% url 'Aacao' 'Apagar' tarefa.id %}" style="margin:0px 10px 0px 0px;">Apagar</a>
+        <a href="{% url 'Aacao' 'Encerrar' tarefa.id %}" style="margin:0px 10px 0px 0px;">Encerrar</a>
+        <a href="{% url 'Aacao' 'Editar' tarefa.id %}" style="margin:0px 10px 0px 0px;">Editar</a>
+        <a href="{% url 'Aacao' 'Comentar' tarefa.id %}" style="margin:0px 10px 0px 0px;">Comentar</a>
+        <a href="{% url 'Aacao' 'Favoritar' tarefa.id %}"><span style="float: right;">fixar</span></a>
+
+    </td></tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'thebase.html' %}
+
+{% block 'logger' %}
+<table class="logger">
+        <tr><td style="height: 50px;">
+        </td>
+                <td class="field">
+                    {{user}}
+                </td><td class="field">
+                    <a href="{% url 'grupos' user.email %}">Grupos</a>
+                </td><td class="field">
+                    <a href="{% url 'novoGrupo' %}">Novo grupo</a>
+                </td><td class="field">
+                    <a href="{% url 'new' %}">Novo registro</a>
+                </td><td class="field">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </td>
+        </tr>
+</table>
+{% endblock %}
+
+{% block 'conteudo' %}
+
+{% if not grupos and not meusGrupos %}
+
+<h1 style="color:black; text-align:center; margin-top:100px;">Você ainda não faz parte de nenhum grupo</h1>
+<h2 style="color:black; text-align:center;">Experimente criar um ou procure o administrador de algum</h2>
+
+{% else %}
+
+<table class="corpo" style="margin: 1%; border-radius: 5px; width:98%; background-color: #EEE">
+    {% if messages %}
+    {% for message in messages %}
+    <tr><td colspan="7" class="cell">
+        {{message}}
+    </td></tr>
+    {% endfor %}
+    {% endif %}
+    <tr><td colspan="6" class="cell">
+        Seus Grupos
+    </td></tr>
+    <tr><td class="cell">
+        Título
+    </td><td class="cell">
+        Membros
+    </td><td class="cell">
+        Convite
+    </td><td class="cell">
+        Etiqueta
+    </td><td class="cell">
+        Publico
+    </td><td class="cell">
+        Aberto
+    </td></tr>
+{% for grupo in meusGrupos %}
+    <tr><td class="cell">
+        <a href="{% url 'detalhaGrupo' grupo.id%}">{{grupo.titulo}}</a> -
+        <a href="{% url 'editaGrupo' grupo.id%}">Editar</a>
+        {% if grupo.alerta %} - Pedidos de entrada pendentes {% endif %}
+    </td><td class="cell">
+        {{grupo.membros}}
+    </td><td class="cell">
+        pilot.net.br/convite/{{grupo.id}}
+    </td><td class="cell">
+        {{grupo.tag}}
+    </td><td class="cell">
+        {% if grupo.pub %} S {% else %} N {% endif %}
+    </td><td class="cell">
+        {% if grupo.open %} S {% else %} N {% endif %}
+    </td></tr>
+{% endfor %}
+</table>
+
+<br>
+
+<table class="corpo" style="margin: 1%; border-radius: 5px; width:98%; background-color: #EEE">
+    <tr><td colspan="5">
+        <b>Grupos que participa</b>
+    </td></tr>
+    <tr><td class="cell">
+        Título
+    </td><td class="cell">
+        Membros
+    </td><td class="cell">
+        Dono
+    </td><td class="cell">
+        Publico
+    </td><td class="cell">
+        Aberto
+    </td></tr>
+{% for grupo in grupos %}
+    <tr><td class="cell">
+        <a href="{% url 'detalhaGrupo' grupo.id%}">{{grupo.titulo}}</a> -
+        <a href="{% url 'sair' grupo.id%}">Sair</a>
+        {% if not grupo.aproved %} - aguardando aprovação {% endif %}
+    </td><td class="cell">
+        {{grupo.membros}}
+    </td><td class="cell">
+        {{grupo.dono}}
+    </td><td class="cell">
+        {{grupo.pub}}
+    </td><td class="cell">
+        {{grupo.open}}
+    </td></tr>
+{% endfor %}
+</table>
+
+{% endif %}
+
+{% endblock %}

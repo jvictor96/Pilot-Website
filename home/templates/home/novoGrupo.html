@@ -1,0 +1,56 @@
+{% extends 'thebase.html' %}
+
+{% block 'logger' %}
+<table class="logger">
+        <tr><td style="height: 50px;">
+        </td>
+                <td class="field">
+                    {{user}}
+                </td><td class="field">
+                    <a href="{% url 'grupos' user.email %}">Grupos</a>
+                </td><td class="field">
+                    <a href="{% url 'novoGrupo' %}">Novo grupo</a>
+                </td><td class="field">
+                    <a href="{% url 'new' %}">Novo registro</a>
+                </td><td class="field">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </td>
+        </tr>
+</table>
+{% endblock %}
+
+{% block 'conteudo' %}
+<form action="{% url 'novoGrupo' %}" method="post">
+<table class="corpo">
+    {% csrf_token %}
+    <tr>
+        <td class="cell">
+            Nome <input type="text" name="titulo" value="{{grupo.titulo}}">
+            <input type="text" value="{{user.email}}" name="dono" hidden>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Etiqueta <input type="text" name="tag" value="{{grupo.tag}}">
+            <input type="text" name="id" value="{{grupo.id}}" hidden>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Aberto <input type="checkbox" name="open" {{open}}>
+            <input type="checkbox" name="edita" {{editando}} hidden>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Público <input type="checkbox" name="pub" {{pub}}>
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            <button type="submit">Confirma</button>
+        </td>
+    </tr>
+</table>
+</form>
+{% endblock %}

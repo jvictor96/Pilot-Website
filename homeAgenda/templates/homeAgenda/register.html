@@ -1,0 +1,51 @@
+{% extends 'thebase.html' %}
+
+{% block 'conteudo' %}
+<form action="{% url 'confirmaEmail' %}" method="post">
+<table class="corpo">
+    {% csrf_token %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <tr>
+                <td class="cell">
+                    {{message}}
+                </td>
+            </tr>
+    <tr>
+        {% endfor %}
+    {% endif %}
+
+    <tr>
+        <td class="cell">
+            Nome <input type="text" name="nome" value="{{nome}}">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Sobrenome <input type="text" name="sobrenome" value="{{sobrenome}}">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Nome de Usuário <input type="text" name="usuario" value="{{usuario}}">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            E-mail <input type="email" name="email" value="{{email}}">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            Senha <input type="password" name="senha">
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            <button type="submit">Confirma</button>
+        </td>
+    </tr>
+</table>
+</form>
+{% endblock %}

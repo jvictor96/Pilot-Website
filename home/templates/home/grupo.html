@@ -1,0 +1,47 @@
+{% extends 'thebase.html' %}
+
+{% block 'logger' %}
+<table class="logger">
+        <tr><td style="height: 50px;">
+        </td>
+                <td class="field">
+                    {{user}}
+                </td><td class="field">
+                    <a href="{% url 'grupos' user.email %}">Grupos</a>
+                </td><td class="field">
+                    <a href="{% url 'novoGrupo' %}">Novo grupo</a>
+                </td><td class="field">
+                    <a href="{% url 'new' %}">Novo registro</a>
+                </td><td class="field">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </td>
+        </tr>
+</table>
+{% endblock %}
+
+{% block 'conteudo' %}
+<table class="corpo" style="margin: 1%; border-radius: 5px; width:98%; background-color: #EEE">
+    <tr><td colspan="2" class="cell">
+        <b>{{grupo.titulo}}</b>
+    </td></tr>
+    <tr><td class="cell">
+        Membro
+    </td><td class="cell">
+        Ação
+    </td></tr>
+{% for membro in membros %}
+    <tr><td class="cell">
+        {{membro.email}}
+        {% if not membro.aproved %}
+         (aguardando aprovação para entrada)
+        {% endif %}
+    </td><td class="cell">
+        {% if not membro.aproved %}
+        <a href='{% url "acaoMembro" grupo.id membro.email "aprovar"%}'>Aprovar entrada</a> -
+        {% endif %}
+        <a href='{% url "acaoMembro" grupo.id membro.email "expulsar"%}'>Expulsar</a>
+    </td></tr>
+{% endfor %}
+</table>
+
+{% endblock %}
