@@ -14,7 +14,7 @@ class Coisa(models.Model):
 
 
 class Grupo(models.Model):
-    id = models.IntegerField(auto_created=True, primary_key=True)
+    id = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=64)
     dono = models.CharField(max_length=64)
     pub = models.BooleanField(default=False)

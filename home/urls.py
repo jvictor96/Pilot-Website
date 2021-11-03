@@ -23,12 +23,13 @@ urlpatterns = [
     path('buscaTag/<str:grupo>/<str:tag>', views.buscaTag, name='buscaTag'),
     path('buscaGrupo/<int:grupo>', views.buscaGrupo, name='buscaGrupo'),
 
-    path('log/Zlogin', views.Zlogin, name='Zlogin'),
-    path('log/Zlogon/p1', views.register, name='logonPasso1'),
+    path('log/Zlogin', email.Zlogin, name='Zlogin'),
+    path('log/Zlogon/p1', email.register, name='logonPasso1'),
     path('log/Zlogon/p2', email.emailConfirmacao, name='logonPasso2'),
-    path('log/Zlogon/p3', views.confirmaLogon, name='logonPasso3'),
-    path('log/logout', views.logout, name='logout'),
-    path('register', views.register, name='register'),
+    path('log/Zlogon/p3', email.confirmaLogon, name='logonPasso3'),
+    path('log/logout', email.logout, name='logout'),
+    path('register', email.register, name='register'),
+    path('recuperarConta', email.recuperar, name='recuperar'),
 
     path('new', views.new, name='new'),
     path('grupos/<str:nome>', views.fGrupos, name='grupos'),

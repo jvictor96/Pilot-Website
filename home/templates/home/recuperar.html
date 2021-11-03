@@ -1,0 +1,23 @@
+{% extends 'thebase.html' %}
+
+{% block 'conteudo' %}
+<form action="{% url 'logonPasso2' %}" method="post">
+<table class="corpo">
+    {% csrf_token %}
+    <tr>
+        <td class="cell">
+            Informe o e-mail usado na criação da conta a recuperar
+        </td>
+    </tr>
+    <tr>
+        <td class="cell">
+            E-mail <input type="email" name="email">
+        </td>
+    </tr>
+        <td class="cell">
+            <button type="submit">Confirma</button>
+        </td>
+    </tr>
+</table>
+</form>
+{% endblock %}

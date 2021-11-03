@@ -1,22 +1,7 @@
 {% extends 'thebase.html' %}
 
 {% block 'logger' %}
-<table class="logger">
-        <tr><td style="height: 50px;">
-        </td>
-                <td class="field">
-                    {{user}}
-                </td><td class="field">
-                    <a href="{% url 'grupos' user.email %}">Grupos</a>
-                </td><td class="field">
-                    <a href="{% url 'novoGrupo' %}">Novo grupo</a>
-                </td><td class="field">
-                    <a href="{% url 'new' %}">Novo registro</a>
-                </td><td class="field">
-                    <a href="{% url 'logout' %}">Logout</a>
-                </td>
-        </tr>
-</table>
+{% include 'parciais/loggerReg.html' %}
 {% endblock %}
 
 {% block 'conteudo' %}

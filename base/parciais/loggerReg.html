@@ -1,0 +1,33 @@
+<table class="logger">
+        <tr><td style="height: 50px;">
+            <b>Registros</b>
+        </td>
+            {% if user.is_authenticated %}
+                <td class="field">
+                    {{user}}
+                </td><td class="field">
+
+                </td><td class="field">
+                    <a href="{% url 'grupos' user.email %}">Grupos</a>
+                </td><td class="field">
+                    <a href="{% url 'new' %}">Novo registro</a>
+                </td><td class="field">
+                    <a href="{% url 'novoGrupo' %}">Novo grupo</a>
+                </td><td class="field">
+                    <a href="{% url 'logout' %}">Logout</a>
+                </td>
+            {% else %}
+                <form action="{% url 'Zlogin'%}" method="POST">
+                    {% csrf_token %}
+                <td>
+                    Nome de usuário:<input type="text" style="margin-right:20px;" name="usuario">
+                    <a href="{% url 'logonPasso1' %}">Criar conta</a>
+                </td><td>
+                    Senha:<input type="password" style="margin-right:20px;" name="senha">
+                </td><td>
+                    <button type="submit">Confirmar</button>
+                </td>
+                </form>
+            {% endif %}
+        </tr>
+</table>

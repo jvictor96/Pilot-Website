@@ -45,53 +45,6 @@ def index(request, **kwargs):
     return render(request, 'home/index.html', {'grupos':lista, 'key':'index'})
 
 
-def Zlogin(request):
-    senha = request.POST.get('senha')
-    usuario = request.POST.get('usuario')
-    if User.objects.filter(username=usuario).exists():
-        user = auth.authenticate(request, username=usuario, password=senha)
-        if user:
-            auth.login(request,user)
-        else:
-            pass
-
-    return redirect('index')
-
-
-def confirmaLogon(request):
-    email = request.POST.get('email')
-    senha = request.POST.get('senha')
-    usuario = request.POST.get('usuario')
-    nome = request.POST.get('nome')
-    sobrenome = request.POST.get('sobrenome')
-    chave = request.POST.get('chave')
-    codigo = request.POST.get('codigo')
-
-    if chave == codigo:
-        perfil = Perfis(usuario= usuario)
-        perfil.save()
-
-        user=User.objects.create_user(username=usuario, email=email, password=senha, first_name=nome,
-                                      last_name=sobrenome)
-        user.save()
-        user = auth.authenticate(request, username=usuario, password=senha)
-        auth.login(request,user)
-
-    else:
-        messages.add_message(request, messages.WARNING, "Código incorreto, tente novamente.")
-
-    return redirect('index')
-
-
-def logout(request):
-    auth.logout(request)
-    return redirect('index')
-
-
-def register(request):
-    return render(request, 'home/register.html')
-
-
 @login_required(redirect_field_name='index')
 def new(request):
     user = auth.get_user(request)
@@ -154,8 +107,11 @@ def novoGrupo(request):
     user=auth.get_user(request)
     titulo = request.POST.get('titulo')
     dono = request.POST.get('dono')
+    tag = request.POST.get('tag')
+
     if request.POST.get('edita'):
         editaGrupo(request, request.POST.get('id'))
+        return redirect('grupos/'+user.email)
 
     if Grupo.objects.filter(dono=dono, titulo=titulo):
         messages.add_message(request, messages.WARNING, "Você ja possui em grupo com esse nome")
@@ -170,7 +126,7 @@ def novoGrupo(request):
         open = True
     else:
         open = False
-    grupo = Grupo(titulo=titulo, dono=dono, pub=pub, open=open)
+    grupo = Grupo(titulo=titulo, dono=dono, pub=pub, open=open, tag=tag)
     grupo.save()
 
     messages.add_message(request, messages.SUCCESS, "Grupo criado com sucesso")
@@ -179,7 +135,7 @@ def novoGrupo(request):
 
 @login_required(redirect_field_name='index')
 def editaGrupo(request, id):
-    user=auth.get_user(request)
+    user = auth.get_user(request)
     if user.email == Grupo.objects.get(id=id).dono:
         if request.method == "POST":
             titulo = request.POST.get('titulo')
@@ -193,7 +149,6 @@ def editaGrupo(request, id):
             else:
                 open = False
             Grupo.objects.filter(id=id).update(titulo=titulo, tag=tag, pub=pub, open=open)
-            return redirect('grupos/'+user.email)
         else:
             grupo = Grupo.objects.get(id=id)
             pub, open = '', ''
@@ -204,7 +159,6 @@ def editaGrupo(request, id):
             return render(request, 'home/novoGrupo.html', {'grupo': grupo, 'pub': pub, 'open': open, 'editando': 'checked'})
     else:
         messages.add_message(request, messages.WARNING, "Você não é dono do grupo que está tentando acessar")
-        return redirect('grupos/'+user.email)
 
 
 @login_required(redirect_field_name='index')
